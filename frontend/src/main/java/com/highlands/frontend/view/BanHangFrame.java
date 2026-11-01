@@ -25,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.highlands.frontend.api.ApiClient;
 import com.highlands.frontend.api.ApiException;
+import com.highlands.frontend.dto.HoaDonDto;
 import com.highlands.frontend.dto.LoginResponse;
 import com.highlands.frontend.dto.SanPhamDto;
 import com.highlands.frontend.dto.ToppingDto;
@@ -73,6 +74,7 @@ public class BanHangFrame extends JFrame {
     private final JButton btnThemVaoGio = new JButton("Thêm vào giỏ");
     private final JButton btnXoaDong = new JButton("Xóa dòng");
     private final JButton btnLamMoiGio = new JButton("Xóa cả giỏ");
+    private final JButton btnThanhToan = new JButton("Thanh toán");
 
     public BanHangFrame(LoginResponse nguoiDung) {
         super("Highlands Coffee - Bán hàng");
@@ -142,7 +144,11 @@ public class BanHangFrame extends JFrame {
         pnlNutGio.add(btnLamMoiGio);
         JPanel pnlDuoiGio = new JPanel(new BorderLayout());
         pnlDuoiGio.add(pnlNutGio, BorderLayout.WEST);
-        pnlDuoiGio.add(lblTong, BorderLayout.EAST);
+        btnThanhToan.setFont(btnThanhToan.getFont().deriveFont(Font.BOLD));
+        JPanel pnlPhai = new JPanel(new FlowLayout(FlowLayout.RIGHT, 12, 0));
+        pnlPhai.add(lblTong);
+        pnlPhai.add(btnThanhToan);
+        pnlDuoiGio.add(pnlPhai, BorderLayout.EAST);
 
         JPanel pnlGio = new JPanel(new BorderLayout(0, 6));
         pnlGio.add(cuonGio, BorderLayout.CENTER);
@@ -161,6 +167,7 @@ public class BanHangFrame extends JFrame {
         btnThemVaoGio.addActionListener(e -> themVaoGio());
         btnXoaDong.addActionListener(e -> xoaDong());
         btnLamMoiGio.addActionListener(e -> lamMoiGio());
+        btnThanhToan.addActionListener(e -> thanhToan());
 
         setSize(1000, 680);
         setLocationRelativeTo(null);
@@ -251,6 +258,26 @@ public class BanHangFrame extends JFrame {
         if (chon == JOptionPane.YES_OPTION) {
             gioHang.lamMoi();
             capNhatGioHang();
+        }
+    }
+
+    private void thanhToan() {
+        if (gioHang.laRong()) {
+            JOptionPane.showMessageDialog(this, "Giỏ hàng đang trống, hãy chọn món trước",
+                    "Chưa có món", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        ThanhToanDialog hopThoai = new ThanhToanDialog(this, apiClient, nguoiDung,
+                gioHang.getCacMon(), gioHang.tongTienHang());
+        hopThoai.setVisible(true); // hộp thoại modal: chờ ở đây đến khi đóng
+
+        HoaDonDto hoaDon = hopThoai.getKetQua();
+        if (hoaDon != null) { // null nghĩa là người dùng hủy hoặc chưa thanh toán xong
+            gioHang.lamMoi();
+            capNhatGioHang();
+            hienTrangThai("Đã thanh toán đơn " + hoaDon.maDonHang(), false);
+            new HoaDonDialog(this, hoaDon).setVisible(true);
         }
     }
 
