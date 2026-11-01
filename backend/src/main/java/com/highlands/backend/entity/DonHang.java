@@ -63,6 +63,15 @@ public class DonHang {
     @Column(name = "thoi_gian_dat", nullable = false)
     private LocalDateTime thoiGianDat;
 
+    @Column(name = "thoi_gian_hoan_thanh")
+    private LocalDateTime thoiGianHoanThanh;
+
+    @Column(name = "thoi_gian_huy")
+    private LocalDateTime thoiGianHuy;
+
+    @Column(name = "ly_do_huy", length = 255)
+    private String lyDoHuy;
+
     // Lưu đơn thì tự lưu luôn các dòng chi tiết (cascade)
     @OneToMany(mappedBy = "donHang", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChiTietDonHang> cacChiTiet = new ArrayList<>();
@@ -86,6 +95,9 @@ public class DonHang {
     public BigDecimal getTienGiamDiem() { return tienGiamDiem; }
     public BigDecimal getTongThanhToan() { return tongThanhToan; }
     public LocalDateTime getThoiGianDat() { return thoiGianDat; }
+    public LocalDateTime getThoiGianHoanThanh() { return thoiGianHoanThanh; }
+    public LocalDateTime getThoiGianHuy() { return thoiGianHuy; }
+    public String getLyDoHuy() { return lyDoHuy; }
     public List<ChiTietDonHang> getCacChiTiet() { return cacChiTiet; }
 
     public void setMaDonHang(String maDonHang) { this.maDonHang = maDonHang; }
@@ -97,4 +109,7 @@ public class DonHang {
     public void setTongTienHang(BigDecimal tongTienHang) { this.tongTienHang = tongTienHang; }
     public void setTongThanhToan(BigDecimal tongThanhToan) { this.tongThanhToan = tongThanhToan; }
     public void setThoiGianDat(LocalDateTime thoiGianDat) { this.thoiGianDat = thoiGianDat; }
+    public void setThoiGianHoanThanh(LocalDateTime thoiGianHoanThanh) { this.thoiGianHoanThanh = thoiGianHoanThanh; }
+    public void setThoiGianHuy(LocalDateTime thoiGianHuy) { this.thoiGianHuy = thoiGianHuy; }
+    public void setLyDoHuy(String lyDoHuy) { this.lyDoHuy = lyDoHuy; }
 }
