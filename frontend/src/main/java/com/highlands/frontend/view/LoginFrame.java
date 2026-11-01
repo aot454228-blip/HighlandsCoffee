@@ -109,7 +109,8 @@ public class LoginFrame extends JFrame {
                 btnDangNhap.setEnabled(true);
                 try {
                     LoginResponse ketQua = get();
-                    hienThongBao("Đăng nhập thành công. Vai trò: " + ketQua.vaiTro(), false);
+                                        dispose();
+                    new BanHangFrame(ketQua).setVisible(true);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 } catch (ExecutionException e) {
