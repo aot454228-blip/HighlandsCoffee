@@ -22,3 +22,17 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+# Maven build output
+target/
+
+# IDE / editor
+.vscode/
+.idea/
+*.iml
+
+# File cau hinh chua mat khau MySQL (moi nguoi tu tao tren may minh)
+backend/src/main/resources/application.properties
+
+# He dieu hanh
+Thumbs.db
+.DS_Store
