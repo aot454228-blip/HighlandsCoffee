@@ -45,6 +45,7 @@ public class BanHangFrame extends JFrame {
     private final LoginResponse nguoiDung;
     private final GioHang gioHang = new GioHang();
     private DonHangFrame cuaSoDonHang; // cửa sổ xử lý đơn, mở khi bấm nút "Đơn hàng"
+    private TraCuuKhachHangFrame cuaSoKhachHang; // cửa sổ tra cứu khách, mở khi bấm nút "Khách hàng"
 
     // Dòng thứ i của bảng thực đơn tương ứng phần tử thứ i của dsSanPham
     private List<SanPhamDto> dsSanPham = new ArrayList<>();
@@ -77,6 +78,7 @@ public class BanHangFrame extends JFrame {
     private final JButton btnLamMoiGio = new JButton("Xóa cả giỏ");
     private final JButton btnThanhToan = new JButton("Thanh toán");
     private final JButton btnDonHang = new JButton("Đơn hàng");
+    private final JButton btnKhachHang = new JButton("Khách hàng");
 
     public BanHangFrame(LoginResponse nguoiDung) {
         super("Highlands Coffee - Bán hàng");
@@ -100,6 +102,7 @@ public class BanHangFrame extends JFrame {
         JPanel pnlNguoiDung = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         pnlNguoiDung.add(new JLabel("Xin chào " + nguoiDung.tenDangNhap()
                 + " (" + nguoiDung.vaiTro() + ")"));
+        pnlNguoiDung.add(btnKhachHang);
         pnlNguoiDung.add(btnDonHang);
         pnlNguoiDung.add(btnTaiLai);
         pnlNguoiDung.add(btnDangXuat);
@@ -172,6 +175,7 @@ public class BanHangFrame extends JFrame {
         btnLamMoiGio.addActionListener(e -> lamMoiGio());
         btnThanhToan.addActionListener(e -> thanhToan());
         btnDonHang.addActionListener(e -> moDonHang());
+        btnKhachHang.addActionListener(e -> moTraCuuKhachHang());
 
         setSize(1000, 680);
         setLocationRelativeTo(null);
@@ -291,6 +295,15 @@ public class BanHangFrame extends JFrame {
             cuaSoDonHang.setVisible(true);
         } else {
             cuaSoDonHang.toFront(); // đã mở rồi thì đưa lên trước, không mở thêm
+        }
+    }
+
+    private void moTraCuuKhachHang() {
+        if (cuaSoKhachHang == null || !cuaSoKhachHang.isDisplayable()) {
+            cuaSoKhachHang = new TraCuuKhachHangFrame(apiClient);
+            cuaSoKhachHang.setVisible(true);
+        } else {
+            cuaSoKhachHang.toFront(); // đã mở rồi thì đưa lên trước, không mở thêm
         }
     }
 

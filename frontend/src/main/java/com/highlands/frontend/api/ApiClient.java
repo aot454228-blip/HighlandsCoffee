@@ -3,9 +3,11 @@ package com.highlands.frontend.api;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -18,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.highlands.frontend.dto.DonHangDto;
 import com.highlands.frontend.dto.DonHangTomTatDto;
 import com.highlands.frontend.dto.HoaDonDto;
+import com.highlands.frontend.dto.KhachHangDto;
 import com.highlands.frontend.dto.LoginResponse;
 import com.highlands.frontend.dto.SanPhamDto;
 import com.highlands.frontend.dto.ToppingDto;
@@ -112,6 +115,16 @@ public class ApiClient {
         body.put("soTienKhachDua", soTienKhachDua);
         body.put("maGiaoDich", maGiaoDich);
         return guiPost("/api/don-hang/" + donHangId + "/thanh-toan", body, HoaDonDto.class);
+    }
+
+    /** Tìm khách hàng theo tên, số điện thoại hoặc mã. tuKhoa rỗng thì lấy 50 khách đầu tiên. */
+    public List<KhachHangDto> timKhachHang(String tuKhoa) {
+        String duongDan = "/api/khach-hang";
+        if (tuKhoa != null && !tuKhoa.isBlank()) {
+            // Mã hóa từ khóa để tiếng Việt và ký tự đặc biệt đi qua URL an toàn
+            duongDan += "?tuKhoa=" + URLEncoder.encode(tuKhoa.trim(), StandardCharsets.UTF_8);
+        }
+        return layDanhSach(duongDan, new TypeReference<List<KhachHangDto>>() { });
     }
 
     /** Lấy danh sách đơn. trangThai = null thì lấy 100 đơn mới nhất. */
