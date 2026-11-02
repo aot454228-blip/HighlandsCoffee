@@ -34,4 +34,10 @@ public class Topping {
     public BigDecimal getGiaBan() { return giaBan; }
     public String getHinhAnh() { return hinhAnh; }
     public String getTrangThai() { return trangThai; }
+
+    // --- Setter cho phần quản lý (bổ sung) ---
+    public void setTenTopping(String tenTopping) { this.tenTopping = tenTopping; }
+    public void setGiaBan(BigDecimal giaBan) { this.giaBan = giaBan; }
+    public void setHinhAnh(String hinhAnh) { this.hinhAnh = hinhAnh; }
+    public void setTrangThai(String trangThai) { this.trangThai = trangThai; }
 }

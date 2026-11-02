@@ -9,4 +9,9 @@ import com.highlands.backend.entity.Topping;
 public interface ToppingRepository extends JpaRepository<Topping, Long> {
 
     List<Topping> findByTrangThaiOrderByTenToppingAsc(String trangThai);
+
+    // --- Bổ sung cho phần quản lý ---
+    java.util.List<Topping> findAllByOrderByIdAsc();
+
+    boolean existsByTenToppingIgnoreCaseAndIdNot(String tenTopping, Long id);
 }
