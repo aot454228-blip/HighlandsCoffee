@@ -35,4 +35,9 @@ public class SanPhamKichThuoc {
     public SanPham getSanPham() { return sanPham; }
     public KichThuoc getKichThuoc() { return kichThuoc; }
     public BigDecimal getGiaBan() { return giaBan; }
+
+    // --- Setter cho phần quản lý (bổ sung) ---
+    public void setSanPham(SanPham sanPham) { this.sanPham = sanPham; }
+    public void setKichThuoc(KichThuoc kichThuoc) { this.kichThuoc = kichThuoc; }
+    public void setGiaBan(BigDecimal giaBan) { this.giaBan = giaBan; }
 }

@@ -53,4 +53,12 @@ public class SanPham {
     public String getHinhAnh() { return hinhAnh; }
     public String getTrangThai() { return trangThai; }
     public List<SanPhamKichThuoc> getCacGiaTheoSize() { return cacGiaTheoSize; }
+
+    // --- Setter cho phần quản lý (bổ sung) ---
+    public void setMaSanPham(String maSanPham) { this.maSanPham = maSanPham; }
+    public void setDanhMuc(DanhMuc danhMuc) { this.danhMuc = danhMuc; }
+    public void setTenSanPham(String tenSanPham) { this.tenSanPham = tenSanPham; }
+    public void setMoTa(String moTa) { this.moTa = moTa; }
+    public void setHinhAnh(String hinhAnh) { this.hinhAnh = hinhAnh; }
+    public void setTrangThai(String trangThai) { this.trangThai = trangThai; }
 }
