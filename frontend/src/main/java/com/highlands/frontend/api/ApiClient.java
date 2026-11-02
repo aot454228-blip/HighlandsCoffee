@@ -16,6 +16,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.highlands.frontend.dto.DonHangDto;
+import com.highlands.frontend.dto.DonHangTomTatDto;
 import com.highlands.frontend.dto.HoaDonDto;
 import com.highlands.frontend.dto.LoginResponse;
 import com.highlands.frontend.dto.SanPhamDto;
@@ -113,6 +114,24 @@ public class ApiClient {
         return guiPost("/api/don-hang/" + donHangId + "/thanh-toan", body, HoaDonDto.class);
     }
 
+    /** Lấy danh sách đơn. trangThai = null thì lấy 100 đơn mới nhất. */
+    public List<DonHangTomTatDto> layDanhSachDon(String trangThai) {
+        String duongDan = "/api/don-hang";
+        if (trangThai != null && !trangThai.isBlank()) {
+            duongDan += "?trangThai=" + trangThai; // mã trạng thái chỉ gồm chữ HOA và dấu gạch dưới
+        }
+        return layDanhSach(duongDan, new TypeReference<List<DonHangTomTatDto>>() { });
+    }
+
+    /** Đổi trạng thái đơn. lyDo chỉ bắt buộc khi trangThaiMoi là DA_HUY. */
+    public DonHangDto doiTrangThai(Long donHangId, Long taiKhoanId, String trangThaiMoi, String lyDo) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("taiKhoanId", taiKhoanId);
+        body.put("trangThaiMoi", trangThaiMoi);
+        body.put("lyDo", lyDo);
+        return guiPut("/api/don-hang/" + donHangId + "/trang-thai", body, DonHangDto.class);
+    }
+
     /** Gửi GET và đổi JSON thành danh sách đối tượng Java. */
     private <T> List<T> layDanhSach(String duongDan, TypeReference<List<T>> kieu) {
         try {
@@ -139,8 +158,16 @@ public class ApiClient {
         }
     }
 
-    /** Gửi POST (JSON) và đổi kết quả thành đối tượng Java. Mã 2xx là thành công. */
     private <T> T guiPost(String duongDan, Object body, Class<T> kieu) {
+        return guiJson("POST", duongDan, body, kieu);
+    }
+
+    private <T> T guiPut(String duongDan, Object body, Class<T> kieu) {
+        return guiJson("PUT", duongDan, body, kieu);
+    }
+
+    /** Gửi yêu cầu có nội dung JSON (POST hoặc PUT) và đổi kết quả thành đối tượng Java. Mã 2xx là thành công. */
+    private <T> T guiJson(String phuongThuc, String duongDan, Object body, Class<T> kieu) {
         try {
             String json = mapper.writeValueAsString(body);
 
@@ -149,7 +176,7 @@ public class ApiClient {
                     .header("Content-Type", "application/json; charset=UTF-8")
                     .header("Accept", "application/json")
                     .timeout(Duration.ofSeconds(10))
-                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .method(phuongThuc, HttpRequest.BodyPublishers.ofString(json))
                     .build();
 
             HttpResponse<String> response =
